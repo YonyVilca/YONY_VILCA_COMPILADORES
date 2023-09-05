@@ -50,6 +50,21 @@ reserved = {
    'POR'  : 'TIPO_BY',
    'ORDENAR'  : 'TIPO_ORDER',
    'DESCENDENTE'  : 'TIPO_DESC',
+   'FLOTANTE'  : 'TIPO_FLOAT',
+   'EVALUAR'  : 'TIPO_EVAL',
+   'LIMPIAR'  : 'TIPO_CLEAR',
+   'INSERTAR'  : 'TIPO_INSERT',
+   'ABORTAR'  : 'TIPO_ABORT',
+   'AGREGAR'  : 'TIPO_ADD',
+   'ALINEAR'  : 'TIPO_ALIGN',
+   'POR_DEFECTO'  : 'TIPO_BYDEFAULT',
+   'TODOS'  : 'TIPO_ALL',
+   'DISTINTOS'  : 'TIPO_DISTINCT',
+   'MOVER'  : 'TIPO_MOVE',
+   'PROMEDIO'  : 'TIPO_AVG',
+   'EN'  : 'TIPO_IN',
+   'DOBLE'  : 'TIPO_DOUBLE',
+   'EXTRAER'  : 'TIPO_EXTRACT',
 }
 
 tokens = [
@@ -69,7 +84,12 @@ tokens = [
     'COMENTARIOL',
     'COMENTARIOB',
     'GREATEROREQUAL',
-    'LESSOREQUAL'
+    'LESSOREQUAL',
+    'POINT',
+    'NOTEQUALTO',
+    'NOTLESSTHAN',
+    'NOTGREATERTHAN',
+    'MODULO',
     
  ] + list(reserved.values())
  # Regular expression rules for simple tokens
@@ -82,11 +102,16 @@ t_GREATEROREQUAL  = r'\>='
 t_LESSOREQUAL  = r'\<='
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
+t_NOTEQUALTO  = r'\<\>'
+t_NOTLESSTHAN  = r'\!\>'
+t_NOTGREATERTHAN  = r'\!\<'
+t_MODULO  = r'%'
 t_COMMA   = r','
 t_COLON   = r':'
 t_SEMICOLON = r';'
 t_COMENTARIOL = r'--.*'
 t_COMENTARIOB = r'/\*(.|\n)*?\*/'
+t_POINT = r'\.'
 #t_NUMBER  = r'\d+'
 # A regular expression rule with some action code
 def t_ID(t):
@@ -123,7 +148,7 @@ CREAR TABLA Persona (
     );
     
     ACTUALIZAR Persona
-    ESTABLECER nombre = 'Juan', edad = 20
+    ESTABLECER nombre = 'Juan', edad = 20.1
     DONDE id = 1;
     
     ELIMINAR TABLA Persona;
@@ -138,7 +163,8 @@ CREAR TABLA Persona (
     INICIO
         OBTENER * DESDE Persona;
     FIN;
-    
+    /* Este es un comentario de varias líneas
+que se extiende por más de una línea */
     EJECUTAR Obtener_Persona;
 '''
 # Give the lexer some input
