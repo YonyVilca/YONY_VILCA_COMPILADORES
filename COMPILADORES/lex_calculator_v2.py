@@ -22,7 +22,7 @@ reserved = {
    'ENTERO'  : 'TIPO_INT',
    'NO' : 'TIPO_NOT',  
    'NULO'  : 'TIPO_NULL',
-   'IDENTIDAD'  : 'TIPO_IDENTIDAD',
+   'IDENTIDAD'  : 'TIPO_IDENTITY',
    'CADENAVAR'  : 'TIPO_VARCHAR',
    'UNICA'  : 'TIPO_UNIQUE',
    'POR DEFECTO'  : 'TIPO_DEFAULT',
@@ -65,54 +65,65 @@ reserved = {
    'EN'  : 'TIPO_IN',
    'DOBLE'  : 'TIPO_DOUBLE',
    'EXTRAER'  : 'TIPO_EXTRACT',
+   'ALTERAR'  : 'TIPO_ALTER',
+   'COLUMNA'  : 'TIPO_COLUMN',
+   'RENOMBRAR'  : 'TIPO_RENAME',
+   'HACIA'  : 'TIPO_TO',
+   'DENTRO'  : 'TIPO_INTO',
 }
 
 tokens = [
     'NUMBER',
-    'PLUS',
-    'MINUS',
-    'TIMES',
+    'MAS',
+    'MENOS',
+    'COMODIN',
     'DIVIDE',
     'LPAREN',
     'RPAREN',
-    'EQUAL',
-    'COMMA',
-    'COLON',
-    'SEMICOLON',
+    'IGUAL',
+    'COMA',
+    'DOSPUNTOS',
+    'PUNTOYCOMA',
     'ID',
     'CADENA',
     'COMENTARIOL',
     'COMENTARIOB',
-    'GREATEROREQUAL',
-    'LESSOREQUAL',
-    'POINT',
-    'NOTEQUALTO',
-    'NOTLESSTHAN',
-    'NOTGREATERTHAN',
+    'MAYORIGUAL',
+    'MENORIGUAL',
+    'PUNTO',
+    'NOIGUALA',
+    'NOMENORQUE',
+    'NOMAYORQUE',
     'MODULO',
+    "PMARCA",
+    "MAYOR",
+    "MENOR"
     
  ] + list(reserved.values())
  # Regular expression rules for simple tokens
-t_PLUS    = r'\+'
-t_MINUS   = r'-'
-t_TIMES   = r'\*'
+t_MAS    = r'\+'
+t_MENOS   = r'-'
+t_COMODIN   = r'\*'
 t_DIVIDE  = r'/'
-t_EQUAL  = r'\='
-t_GREATEROREQUAL  = r'\>='
-t_LESSOREQUAL  = r'\<='
+t_IGUAL  = r'\='
+t_MAYORIGUAL    = r'\>='
+t_MENORIGUAL  = r'\<='
+t_MAYOR  = r'>'
+T_MENOR  = r'<'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
-t_NOTEQUALTO  = r'\<\>'
-t_NOTLESSTHAN  = r'\!\>'
-t_NOTGREATERTHAN  = r'\!\<'
+t_NOIGUALA  = r'\<\>'
+t_NOMENORQUE = r'\!\>'
+t_NOMAYORQUE  = r'\!\<'
 t_MODULO  = r'%'
-t_COMMA   = r','
-t_COLON   = r':'
-t_SEMICOLON = r';'
+t_COMA   = r','
+t_DOSPUNTOS   = r':'
+t_PUNTOYCOMA = r';'
 t_COMENTARIOL = r'--.*'
 t_COMENTARIOB = r'/\*(.|\n)*?\*/'
-t_POINT = r'\.'
-#t_NUMBER  = r'\d+'
+t_PUNTO = r'\.'
+t_PMARCA = r'@\w+'
+#t_NUMBER  = r'\d+' 
 # A regular expression rule with some action code
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z0-9_]+'
@@ -140,32 +151,54 @@ def t_error(t):
 lexer = lex.lex()
 # Test it out
 data = '''
--- Este es un comentario de una línea
-CREAR TABLA Persona (
-    id ENTERO PRINCIPAL LLAVE AUTOINCREMENTO,
-    nombre CADENAVAR(50),
-    edad ENTERO,
-    );
-    
-    ACTUALIZAR Persona
-    ESTABLECER nombre = 'Juan', edad = 20.1
-    DONDE id = 1;
-    
-    ELIMINAR TABLA Persona;
-    
-    OBTENER nombre, edad
-    DESDE Persona
-    DONDE ciudad = 'Guatemala'
-    ORDENAR nombre ASCENDENTE;
-    
-    CREAR PROCEDIMIENTO Obtener_Persona
-    COMO
-    INICIO
-        OBTENER * DESDE Persona;
-    FIN;
-    /* Este es un comentario de varias líneas
-que se extiende por más de una línea */
-    EJECUTAR Obtener_Persona;
+-- Creación de la tabla `productos`
+CREAR TABLA productos (
+  id INTERO NO NULO IDENTIDAD,
+  nombre CADENAVAR(255) NO NULO,
+  precio DECIMAL(10,2) NO NULO,
+  descripcion CADENAVAR(255) NULO
+);
+
+-- Eliminar la tabla `productos`
+ELIMINAR TABLA productos;
+
+
+-- Actualización de la tabla `productos` para agregar una columna `categoría`
+ALTERAR TABLA productos AGREGAR COLUMNA categoria CADENAVAR(255) NULO;
+
+-- Actualización de la tabla `productos` para cambiar el nombre de la columna `precio` a `precio_unitario`
+ALTERAR TABLA productos RENOMBRAR COLUMNA precio HACIA precio_unitario;
+
+-- Actualización de la tabla `productos` para eliminar la columna `categoría`
+ALTERAR TABLA productos ELIMINAR COLUMNA categoria;
+
+-- Consulta `SELECT` para obtener todos los registros de la tabla `productos`
+OBTENER * DESDE productos;
+
+-- Consulta `SELECT` para obtener los productos con un precio mayor a 100
+OBTENER * DESDE productos DONDE precio_unitario > 100;
+
+-- Consulta `SELECT` para obtener el nombre y el precio de todos los productos
+OBTENER nombre, precio_unitario DESDE productos;
+
+CREAR PROCEDIMIENTO sp_insertar_producto
+(
+  @nombre CADENAVAR(255),
+  @precio_unitario DECIMAL(10,2)
+)
+COMO
+INICIO
+  INSERTAR DENTRO productos (nombre, precio_unitario)
+  EVALUAR (@nombre, @precio_unitario);
+FIN;
+
+-- Ejecución del procedimiento almacenado `sp_insertar_producto` para insertar un nuevo producto
+EJECUTAR sp_insertar_producto @nombre = 'Producto 1', @precio_unitario = 100;
+
+/* Comentario en varias líneas
+Este es un comentario
+en varias líneas
+*/
 '''
 # Give the lexer some input
 lexer.input(data)
@@ -175,4 +208,4 @@ while True:
     if not tok: 
         break      # No more input
     #print(tok)
-    print(tok.type, tok.value, tok.lineno, tok.lexpos)
+    print("%-40s %s" % (tok.type, tok.value))

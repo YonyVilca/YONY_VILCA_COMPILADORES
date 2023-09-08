@@ -8,7 +8,6 @@ void insertion_sort(int A[], int n) {
       A[i + 1] = A[i];
       i = i - 1;
     }
-    A[i + 1] = key;
   }
 }
 int main() {
