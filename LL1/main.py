@@ -31,7 +31,7 @@ def imprimir_arbol(nodo, nivel=0):
     for hijo in nodo.hijos:
         imprimir_arbol(hijo, nivel + 1)
 
-tabla = pd.read_csv("LL1/tabla.csv", index_col=0)
+tabla = pd.read_csv("LL1/hoja.csv", index_col=0)
 contador = 0
 pila = []
 
@@ -43,33 +43,41 @@ pila.append(simbolo_E)
 raiz = NodoArbol(simbolo_E.id, simbolo_E.simbolo, simbolo_E.lexema)
 
 entrada = [ 
-    {"simbolo":"int", "lexema":"4", "nroline":2, "col":2},
-    {"simbolo":"*", "lexema":"*", "nroline":2, "col":4},
-    {"simbolo":"int", "lexema":"5", "nroline":2, "col":6},
-    {"simbolo":"$", "lexema":"$", "nroline":0, "col":0},
-]
+            {"simbolo":"int", "lexema":"4", "nroline":2, "col":2},
+            {"simbolo":"*", "lexema":"*", "nroline":2, "col":4},
+            {"simbolo":"int", "lexema":"5", "nroline":2, "col":6},
+            {"simbolo":"$", "lexema":"$", "nroline":0, "col":0},
+          ]
 
-i = 0
+index_entrada = 0
 while len(pila) > 0:
-    simbolo_actual = pila[-1]
-    entrada_actual = entrada[i]["simbolo"]
-    produccion = tabla.loc[simbolo_actual.simbolo, entrada_actual]
-    if produccion == "error":
+    if entrada[index_entrada]["simbolo"] not in tabla.columns:
         print("Error de sintaxis")
         break
-    elif produccion == "pop":
+    if pila[-1].simbolo == entrada[index_entrada]["simbolo"]:
         pila.pop()
-        i += 1
+        index_entrada += 1
+ 
     else:
-        pila.pop()
-        for simbolo in reversed(produccion.split()):
-            nodo_p = NodoPila(simbolo, None)
-            pila.append(nodo_p)
-            nodo_hijo = NodoArbol(nodo_p.id, nodo_p.simbolo, nodo_p.lexema)
-            nodo_padre = buscar_nodo(simbolo_actual.id, raiz)
-            nodo_padre.hijos.append(nodo_hijo)
-            nodo_hijo.padre = nodo_padre
-
-if i == len(entrada) and len(pila) == 0:
+        produccion = tabla.loc[pila[-1].simbolo, entrada[index_entrada]["simbolo"]]
+        print(produccion)
+        if produccion != ('e'):
+            pila.pop()
+            for simbolo in reversed(produccion.split()):
+              nodo_p = NodoPila(simbolo, None)
+              #print("produccion:" + nodo_p.simbolo)
+              #print("entrada actual", entrada[index_entrada]["simbolo"])
+              pila.append(nodo_p)
+        else:
+            pila.pop()
+            #for simbolo in reversed(produccion.split()):
+                #nodo_p = NodoPila(simbolo, None)
+                #pila.append(nodo_p)
+                #nodo_hijo = NodoArbol(nodo_p.id, nodo_p.simbolo, nodo_p.lexema)
+                #nodo_padre = buscar_nodo(simbolo_actual.id, raiz)
+                #nodo_padre.hijos.append(nodo_hijo)
+                #nodo_hijo.padre = nodo_padre
+if len(pila) == 0:
     print("Parse exitoso")
-    imprimir_arbol(raiz)
+else:
+    print("Error de sintaxis")
