@@ -71,7 +71,7 @@ reserved = {
    'HACIA'  : 'TIPO_TO',
    'DENTRO'  : 'TIPO_INTO',
 }
-
+it= 1
 tokens = [
     'NUMBER',
     'MAS',
@@ -149,63 +149,19 @@ def t_error(t):
     t.lexer.skip(1)
 # Build the lexer
 lexer = lex.lex()
+f = open('Test1.txt', 'r')
+data = f.read()
+
+# Give the lexer some input
+lexer.input(data)
+tokensLexer = []
 # Test it out
-data = '''
--- Creación de la tabla `productos`
-CREAR TABLA productos (
-  id INTERO NO NULO IDENTIDAD,
-  nombre CADENAVAR(255) NO NULO,
-  precio DECIMAL(10,2) NO NULO,
-  descripcion CADENAVAR(255) NULO
-);
-
--- Eliminar la tabla `productos`
-ELIMINAR TABLA productos;
-
-
--- Actualización de la tabla `productos` para agregar una columna `categoría`
-ALTERAR TABLA productos AGREGAR COLUMNA categoria CADENAVAR(255) NULO;
-
--- Actualización de la tabla `productos` para cambiar el nombre de la columna `precio` a `precio_unitario`
-ALTERAR TABLA productos RENOMBRAR COLUMNA precio HACIA precio_unitario;
-
--- Actualización de la tabla `productos` para eliminar la columna `categoría`
-ALTERAR TABLA productos ELIMINAR COLUMNA categoria;
-
--- Consulta `SELECT` para obtener todos los registros de la tabla `productos`
-OBTENER * DESDE productos;
-
--- Consulta `SELECT` para obtener los productos con un precio mayor a 100
-OBTENER * DESDE productos DONDE precio_unitario > 100;
-
--- Consulta `SELECT` para obtener el nombre y el precio de todos los productos
-OBTENER nombre, precio_unitario DESDE productos;
-
-CREAR PROCEDIMIENTO sp_insertar_producto
-(
-  @nombre CADENAVAR(255),
-  @precio_unitario DECIMAL(10,2)
-)
-COMO
-INICIO
-  INSERTAR DENTRO productos (nombre, precio_unitario)
-  EVALUAR (@nombre, @precio_unitario);
-FIN;
-
--- Ejecución del procedimiento almacenado `sp_insertar_producto` para insertar un nuevo producto
-EJECUTAR sp_insertar_producto @nombre = 'Producto 1', @precio_unitario = 100;
-
-/* Comentario en varias líneas
-Este es un comentario
-en varias líneas
-*/
-'''
 # Give the lexer some input
 lexer.input(data)
 # Tokenize
 while True:
     tok = lexer.token()
     if not tok: 
-        break      # No more input
+     break      # No more input
     #print(tok)
     print("%-40s %s" % (tok.type, tok.value))

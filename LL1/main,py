@@ -15,7 +15,6 @@ class NodoArbol:
         self.lexema = lexema
         self.hijos = []
         self.padre = None
-
 def buscar_nodo(id, nodo):
     if nodo.id == id:
         return nodo
@@ -30,7 +29,6 @@ def imprimir_arbol(nodo, nivel=0):
     print("  " * nivel + str(nodo.simbolo))
     for hijo in nodo.hijos:
         imprimir_arbol(hijo, nivel + 1)
-
 tabla = pd.read_csv("LL1/hoja.csv", index_col=0)
 contador = 0
 pila = []
@@ -42,12 +40,16 @@ pila.append(simbolo_E)
 
 raiz = NodoArbol(simbolo_E.id, simbolo_E.simbolo, simbolo_E.lexema)
 
-entrada = [ 
-            {"simbolo":"int", "lexema":"4", "nroline":2, "col":2},
-            {"simbolo":"*", "lexema":"*", "nroline":2, "col":4},
-            {"simbolo":"int", "lexema":"5", "nroline":2, "col":6},
-            {"simbolo":"$", "lexema":"$", "nroline":0, "col":0},
-          ]
+entrada = [
+    {"simbolo": "(", "lexema": "(", "nroline": 1, "col": 1},
+    {"simbolo": "int", "lexema": "int", "nroline": 1, "col": 3},
+    {"simbolo": "+", "lexema": "+", "nroline": 1, "col": 7},
+    {"simbolo": "int", "lexema": "int", "nroline": 1, "col": 9},
+    {"simbolo": ")", "lexema": ")", "nroline": 1, "col": 13},
+    {"simbolo": "*", "lexema": "*", "nroline": 1, "col": 15},
+    {"simbolo": "int", "lexema": "int", "nroline": 1, "col": 17},
+    {"simbolo": "$", "lexema": "$", "nroline": 0, "col": 0},
+]
 
 index_entrada = 0
 while len(pila) > 0:
@@ -60,13 +62,13 @@ while len(pila) > 0:
  
     else:
         produccion = tabla.loc[pila[-1].simbolo, entrada[index_entrada]["simbolo"]]
-        print(produccion)
+        if isinstance(produccion, float):
+            print("Error de sintaxis")
+            break
         if produccion != ('e'):
             pila.pop()
-            for simbolo in reversed(produccion.split()):
+            for simbolo in reversed(str(produccion).split()):
               nodo_p = NodoPila(simbolo, None)
-              #print("produccion:" + nodo_p.simbolo)
-              #print("entrada actual", entrada[index_entrada]["simbolo"])
               pila.append(nodo_p)
         else:
             pila.pop()
@@ -79,5 +81,3 @@ while len(pila) > 0:
                 #nodo_hijo.padre = nodo_padre
 if len(pila) == 0:
     print("Parse exitoso")
-else:
-    print("Error de sintaxis")
