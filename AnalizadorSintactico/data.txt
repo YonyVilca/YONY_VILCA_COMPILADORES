@@ -1,0 +1,4 @@
+crear tabla orders (
+  order_date fechahora,
+  order_amount decimal(10),
+);

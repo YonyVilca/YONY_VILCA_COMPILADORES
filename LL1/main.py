@@ -46,8 +46,6 @@ entrada = [
     {"simbolo": "+", "lexema": "+", "nroline": 1, "col": 7},
     {"simbolo": "int", "lexema": "int", "nroline": 1, "col": 9},
     {"simbolo": ")", "lexema": ")", "nroline": 1, "col": 13},
-    {"simbolo": "*", "lexema": "*", "nroline": 1, "col": 15},
-    {"simbolo": "int", "lexema": "int", "nroline": 1, "col": 17},
     {"simbolo": "$", "lexema": "$", "nroline": 0, "col": 0},
 ]
 

@@ -1,0 +1,61 @@
+Z -> B  
+B -> tipo_create CR
+CR -> tipo_procedure id CS
+CS -> tipo_as tipo_begin tipo_insert tipo_into id K tipo_values K puntoycoma tipo_end puntoycoma
+CR -> tipo_table id lparen CT rparen puntoycoma
+CT -> id G WEW WES C 
+B -> tipo_select CMD S
+S -> tipo_from id tipo_where E puntoycoma
+S -> tipo_count tipo_from id tipo_where E puntoycoma
+WEW -> tipo_not tipo_null
+WEW -> tipo_null
+WEW -> ''
+WES -> tipo_autoincrement
+WES -> ''
+C -> coma TETE D
+C -> ''
+TETE -> id
+TETE -> H 
+D -> G WR WEW C
+D -> ''
+WR -> lparen F rparen 
+WR -> ''
+H -> tipo_primarykey lparen id rparen H
+H -> ''
+H -> tipo_foreignkey lparen id rparen tipo_reference id lparen id rparen 
+RW -> lparen id rparen
+
+K -> lparen id U rparen
+K -> ''
+U -> coma id U
+U -> ''
+CMD -> comodin
+CMD -> id U
+CMD -> ''
+W -> lparen pmarca X rparen
+W -> ''
+X -> coma pmarca X
+X -> ''
+L -> coma pmarca J
+L -> ''
+J -> G L
+E -> T E'
+E' -> mas T E'
+E' -> menos T E'
+E' -> divide T E'
+E' -> menor T E'
+E' -> mayor T E'
+E' -> igual T E'
+E' -> mayorigual T E'
+E' -> menorigual T E'
+E' -> ''
+T -> F T'
+T' -> ''
+F -> lparen E rparen
+F -> number
+F -> decimal
+F -> id
+G -> tipo_int 
+G -> tipo_varchar 
+G -> tipo_decimal 
+G -> tipo_datetime
