@@ -42,7 +42,7 @@ def print_tree(node, node_list, info=False):
                 lexeme = "&#38;" if lexeme == '&' else nod.lexeme
                 dot += str(nod.symbol.id) + ' [ label=< <b>' + nod.symbol.symbol + '</b> <br/>' + str(lexeme) + ' <br/>' + str(nod.line) + ' >, color="blue", fillcolor="lightblue", style="filled" ]; \n'
         else:
-            if info and (nod.symbol.symbol == 'E' or nod.symbol.symbol == 'T' or nod.symbol.symbol == "E'" or nod.symbol.symbol == 'TERM' or nod.symbol.symbol == 'IF_DECL' or nod.symbol.symbol == 'WHILE_DECL' or nod.symbol.symbol == 'FOR_DECL'):
+            if info and (nod.symbol.symbol == 'E' or nod.symbol.symbol == 'T'):
                 lexeme = nod.lexeme
                 lexeme = "&#38;" if lexeme == '&' else nod.lexeme
 
@@ -106,7 +106,7 @@ def update_stack(root, node_list, syntax_table, stack, current_token):
 
     return True
 
-syntax_table = pd.read_csv("AnalizadorSintactico/tabla.csv", index_col=0)
+syntax_table = pd.read_csv("tabla.csv", index_col=0)
 
 symbol1 = node_stack('$', True)
 symbol2 = node_stack('Z', False)
@@ -152,7 +152,7 @@ def parser(tokens):
 if __name__ == "__main__":
 
     # source code
-    file_name = "AnalizadorSintactico/data1.txt"
+    file_name = "data.txt"
 
     # lexer
     tokens = get_tokens(file_name)
