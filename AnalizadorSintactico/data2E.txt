@@ -1,0 +1,3 @@
+obtener columna1, columna2
+consumidores
+donde (10 = 10);

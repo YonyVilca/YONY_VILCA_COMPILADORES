@@ -1,0 +1,7 @@
+crear Empleados (
+  dni entero no nulo,
+  nombre cadenavar(50),
+  apellido cadenavar(50),
+  edad entero,
+  salario entero(100)
+);

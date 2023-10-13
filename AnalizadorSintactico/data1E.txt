@@ -1,0 +1,6 @@
+crear procedimiento insert_customer
+como
+inicio
+  tabla dentro customer (usuario1, usuario2)
+  valores (usuario1, usuario2);
+fin;
