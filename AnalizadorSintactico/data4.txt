@@ -1,1 +1,0 @@
-obtener * contar desde table donde 10 = 10;
